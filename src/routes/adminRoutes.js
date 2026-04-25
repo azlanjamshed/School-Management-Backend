@@ -13,6 +13,9 @@ const {
     bulkCreateTeachers,
     bulkCreateStudents,
     getAllStudents,
+    me,
+    getAllClasses,
+    latestEnrollment
 } = require("../controller/adminController");
 
 router.post(
@@ -67,5 +70,24 @@ router.get(
     roleMiddleware("admin"),
     getAllStudents,
 );
+router.get(
+    "/latest-enrollments",
+    isAuthenticate,
+    roleMiddleware("admin"),
+    latestEnrollment,
+);
+router.get(
+    "/admin-profile",
+    isAuthenticate,
+    roleMiddleware("admin"),
+    me,
+);
 
+
+router.get(
+    "/get-all-classes",
+    isAuthenticate,
+    roleMiddleware("admin"),
+    getAllClasses
+);
 module.exports = router;

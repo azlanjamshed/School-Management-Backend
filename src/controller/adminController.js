@@ -325,6 +325,7 @@ exports.getAllStudents = async (req, res) => {
     try {
 
         const student = await Student.find()
+            .populate("classId")
             .populate("userId", "-password")
             .sort({ createdAt: -1 });
 
@@ -341,3 +342,70 @@ exports.getAllStudents = async (req, res) => {
         });
     }
 };
+
+exports.me = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // Find student profile using logged-in userId
+        const admin = await User.findById(userId).select("-password")
+
+
+        if (!admin) {
+            return res.status(404).json({
+                message: "Admin not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            admin
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
+        });
+    }
+}
+exports.getAllClasses = async (req, res) => {
+    try {
+        const classes = await Class.find().populate(
+            "classTeacher",
+            "-password"
+        );
+
+        res.status(200).json({
+            success: true,
+            count: classes.length,
+            classes,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
+exports.latestEnrollment = async (req, res) => {
+    try {
+        const students = await Student.find()
+            .populate("classId")
+            .populate("userId", "-password")
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        res.status(200).json({
+            success: true,
+            count: students.length,
+            students
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}

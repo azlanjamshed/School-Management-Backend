@@ -16,22 +16,21 @@ exports.loginUser = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
-        const token = user.generateToken();
+        const token = await user.generateToken();
 
         res.cookie("token", token, {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
-            maxAge: 24 * 60 * 60 * 1000
+            // maxAge: 24 * 60 * 60 * 1000
         });
 
-        res.json({
+        res.status(200).json({
             message: "Login successful",
             token,
             role: user.role,
             mustChangePassword: user.mustChangePassword,
         });
-
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -54,5 +53,18 @@ exports.logoutUser = async (req, res) => {
         res.status(500).json({
             message: error.message
         });
+    }
+};
+
+exports.checkAuth = async (req, res) => {
+    try {
+        const user = req.user;
+
+        res.status(200).json({
+            role: user.role,
+            mustChangePassword: user.mustChangePassword,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
