@@ -17,11 +17,9 @@ const {
   getAllClasses,
   latestEnrollment,
   updateTeacher,
-  disableTeacher,
-  enableTeacher,
+  toggleTeacherStatus,
   getTeacher,
-  disableStudent,
-  enableStudent,
+  toggleStudentStatus,
   getStudent,
   getSingleClass,
   updateStudent,
@@ -101,30 +99,18 @@ router.put(
   updateTeacher,
 );
 
-router.patch(
-  "/disable-teacher/:id",
+router.put(
+  "/toggle-teacher-status/:id",
   isAuthenticate,
   roleMiddleware("admin"),
-  disableTeacher,
-);
-router.patch(
-  "/enable-teacher/:id",
-  isAuthenticate,
-  roleMiddleware("admin"),
-  enableTeacher,
+  toggleTeacherStatus,
 );
 router.get("/teacher/:id", isAuthenticate, roleMiddleware("admin"), getTeacher);
-router.patch(
-  "/disable-student/:id",
+router.put(
+  "/toggle-student-status/:id",
   isAuthenticate,
   roleMiddleware("admin"),
-  disableStudent,
-);
-router.patch(
-  "/enable-student/:id",
-  isAuthenticate,
-  roleMiddleware("admin"),
-  enableStudent,
+  toggleStudentStatus,
 );
 router.put(
   "/update-student/:id",

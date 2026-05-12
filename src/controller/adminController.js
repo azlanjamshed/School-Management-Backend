@@ -793,3 +793,64 @@ exports.getSingleClass = async (req, res) => {
     });
   }
 };
+
+exports.toggleTeacherStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const teacher = await Teacher.findById(id).populate("userId");
+
+    if (!teacher) {
+      return res.status(404).json({
+        message: "Teacher not found",
+      });
+    }
+
+    teacher.userId.isActive = !teacher.userId.isActive;
+
+    await teacher.userId.save();
+
+    res.status(200).json({
+      message: `Teacher ${
+        teacher.userId.isActive ? "activated" : "deactivated"
+      } successfully`,
+      teacher,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+exports.toggleStudentStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const student = await Student.findById(id).populate("userId");
+
+    if (!student) {
+      return res.status(404).json({
+        message: "Student not found",
+      });
+    }
+
+    student.userId.isActive = !student.userId.isActive;
+
+    await student.userId.save();
+
+    const updatedStudent = await Student.findById(id)
+      .populate("userId", "-password")
+      .populate("classId");
+
+    res.status(200).json({
+      message: `Student ${
+        updatedStudent.userId.isActive ? "activated" : "deactivated"
+      } successfully`,
+      student: updatedStudent,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
