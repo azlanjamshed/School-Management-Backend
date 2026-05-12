@@ -9,15 +9,15 @@ const classSchema = new mongoose.Schema(
 
     section: {
       type: String,
-    //   required: true,
+      //   required: true,
     },
 
     classTeacher: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // teacher user
+      ref: "Teacher", // teacher user
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Class", classSchema);

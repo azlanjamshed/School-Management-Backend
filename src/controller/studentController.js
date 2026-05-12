@@ -43,6 +43,7 @@ exports.changePassword = async (req, res) => {
 
         // 2️⃣ Get user
         const user = await User.findById(userId);
+        
 
         // 3️⃣ Verify current password
         const isMatch = await user.comparePassword(currentPassword);

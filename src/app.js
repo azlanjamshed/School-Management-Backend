@@ -34,9 +34,6 @@ app.use("/api/auth", authRouter)
 app.use("/api/admin", adminRoutes);
 app.use("/api/setup", setupRoutes);
 app.use("/api/teacher", teacherRoutes);
-
-
-
 app.use("/api/student", studentRoutes);
 
 

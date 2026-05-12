@@ -1,6 +1,3 @@
-
-
-
 const mongoose = require("mongoose");
 
 const subjectSchema = new mongoose.Schema({
@@ -45,14 +42,25 @@ const studentSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    parentsName: {
+      type: String,
+    },
+    phone: {
+      type: Number,
+      required: true,
+    },
 
     terms: [termSchema],
 
     remarks: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Student", studentSchema);
